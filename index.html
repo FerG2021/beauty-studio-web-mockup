@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Élan Beauty Studio • Turnos Online | Quimilí</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FAF7F5',
+            sand: '#F2ECE4',
+            terracotta: {
+              DEFAULT: '#C87D6B',
+              dark: '#B26755',
+              light: '#F7EAE6',
+            },
+            charcoal: {
+              DEFAULT: '#221E1D',
+              muted: '#6B625E',
+              light: '#9C928D',
+            },
+            sage: {
+              DEFAULT: '#4F7A65',
+              light: '#EBF2EE',
+            },
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+          boxShadow: {
+            soft: '0 8px 24px -6px rgba(34, 30, 29, 0.08)',
+            card: '0 2px 10px rgba(34, 30, 29, 0.04)',
+            device: '0 25px 60px -15px rgba(0, 0, 0, 0.55), 0 0 0 10px #1C1918, 0 0 0 12px #36302E',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #221E1D;
+    }
+
+    /* Fondo oscuro tipo estudio en desktop para lucir la demo móvil */
+    @media (min-width: 481px) {
+      body {
+        background-color: #161413;
+        background-image:
+          radial-gradient(circle at 50% 0%, rgba(200, 125, 107, 0.14), transparent 60%),
+          radial-gradient(#2A2523 1px, transparent 1px);
+        background-size: 100% 100%, 24px 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        background-color: #FAF7F5;
+        overflow: hidden;
+      }
+    }
+
+    /* Scrollbar limpio interno solo si una pantalla muy pequeña lo requiere */
+    .step-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+    .step-scroll::-webkit-scrollbar-thumb {
+      background: rgba(34, 30, 29, 0.12);
+      border-radius: 99px;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Animaciones de transición entre pasos */
+    @keyframes slideInForward {
+      from {
+        opacity: 0;
+        transform: translateX(22px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInBackward {
+      from {
+        opacity: 0;
+        transform: translateX(-22px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes popIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.92) translateY(10px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .anim-forward {
+      animation: slideInForward 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .anim-backward {
+      animation: slideInBackward 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .anim-pop {
+      animation: popIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-terracotta/20 selection:text-charcoal">
+
+  <!-- Etiqueta superior solo en Desktop para presentación al cliente -->
+  <div class="hidden sm:flex items-center gap-2 text-xs text-white/75 mb-3 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
+    <i class="ph-fill ph-qr-code text-terracotta text-sm"></i>
+    <span>Demo Interactivo QR • Vista Mobile-First sin scroll largo</span>
+  </div>
+
+  <!-- Marco Smartphone en Desktop / Fullscreen 100dvh en Móvil -->
+  <div class="w-full h-[100dvh] sm:w-[410px] sm:h-[810px] sm:max-h-[90vh] bg-cream sm:rounded-[40px] sm:shadow-device flex flex-col overflow-hidden relative">
+
+    <!-- ==================== HEADER FIJO + STEPPER ==================== -->
+    <header class="shrink-0 bg-cream/95 backdrop-blur-md pt-4 pb-3 px-5 border-b border-charcoal/8 z-20">
+      <!-- Fila Superior: Marca + Ubicación -->
+      <div class="flex items-center justify-between gap-2 mb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-terracotta text-white flex items-center justify-center shadow-sm shrink-0">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 3C9.5 7.5 6 10.5 6 14.5C6 17.8137 8.68629 20.5 12 20.5C15.3137 20.5 18 17.8137 18 14.5C18 10.5 14.5 7.5 12 3Z" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 8.5V16.5M9.5 13.5C10.5 14.5 13.5 14.5 14.5 13.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div>
+            <h1 class="font-serif text-lg font-semibold tracking-tight text-charcoal leading-none">
+              Élan Beauty Studio
+            </h1>
+            <p class="text-[11px] text-charcoal-muted flex items-center gap-1 mt-1">
+              <i class="ph-fill ph-map-pin text-terracotta"></i>
+              Quimilí · Sgo. del Estero
+            </p>
+          </div>
+        </div>
+
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sage-light text-sage text-[10px] font-bold uppercase tracking-wide">
+          <span class="w-1.5 h-1.5 rounded-full bg-sage animate-pulse"></span>
+          Online
+        </span>
+      </div>
+
+      <!-- Barra de Navegación del Wizard (Pasos 1 a 4) -->
+      <div id="stepper-header" class="space-y-2">
+        <div class="flex items-center justify-between h-7">
+          <button
+            type="button"
+            id="btn-back"
+            onclick="goBack()"
+            class="invisible inline-flex items-center gap-1 text-xs font-semibold text-charcoal-muted hover:text-charcoal active:scale-95 py-1 px-2 -ml-2 rounded-lg transition-all cursor-pointer"
+          >
+            <i class="ph-bold ph-caret-left text-sm text-terracotta"></i>
+            <span>Volver</span>
+          </button>
+
+          <span id="step-counter" class="text-xs font-bold text-charcoal tracking-wide">
+            Paso 1 de 4
+          </span>
+
+          <span id="step-short-label" class="text-[11px] font-medium text-terracotta">
+            Servicio
+          </span>
+        </div>
+
+        <!-- Barra de progreso animada -->
+        <div class="w-full h-1.5 bg-sand rounded-full overflow-hidden">
+          <div
+            id="progress-bar"
+            class="h-full bg-terracotta rounded-full transition-all duration-300 ease-out"
+            style="width: 25%"
+          ></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ==================== CONTENEDOR DINÁMICO DE PASOS ==================== -->
+    <main id="step-viewport" class="flex-1 overflow-y-auto step-scroll px-5 py-4 flex flex-col">
+
+      <!-- ==================== PASO 1: ELEGÍ TU SERVICIO ==================== -->
+      <section id="step-1" class="flex-1 flex flex-col">
+        <div class="mb-3">
+          <h2 class="font-serif text-xl font-semibold text-charcoal leading-snug">
+            ¿Qué te gustaría hacerte hoy?
+          </h2>
+          <p class="text-xs text-charcoal-muted mt-0.5">
+            Tocá un servicio para ver los días disponibles.
+          </p>
+        </div>
+
+        <!-- Filtros de categoría compactos -->
+        <div id="category-pills" class="flex gap-1.5 overflow-x-auto no-scrollbar pb-2.5 mb-1 shrink-0">
+          <!-- Renderizado por JS -->
+        </div>
+
+        <!-- Lista de servicios -->
+        <div id="services-list" class="space-y-2 flex-1">
+          <!-- Renderizado por JS -->
+        </div>
+      </section>
+
+      <!-- ==================== PASO 2: ELEGÍ EL DÍA ==================== -->
+      <section id="step-2" class="hidden flex-1 flex flex-col">
+        <!-- Resumen de lo elegido (tappable para volver) -->
+        <div class="mb-3.5">
+          <button
+            type="button"
+            onclick="goToStep(1, 'backward')"
+            class="w-full flex items-center justify-between gap-2 bg-white hover:bg-sand/40 px-3.5 py-2.5 rounded-2xl border border-charcoal/8 shadow-card transition-colors text-left cursor-pointer"
+          >
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span class="w-7 h-7 rounded-lg bg-terracotta-light text-terracotta flex items-center justify-center shrink-0">
+                <i id="pill-service-icon" class="ph-duotone ph-scissors text-base"></i>
+              </span>
+              <div class="min-w-0">
+                <span class="text-[10px] uppercase tracking-wider font-semibold text-charcoal-light block">Servicio elegido</span>
+                <span id="pill-service-name" class="text-xs font-bold text-charcoal truncate block">Corte & Brushing</span>
+              </div>
+            </div>
+            <span class="text-[11px] font-semibold text-terracotta shrink-0">Cambiar</span>
+          </button>
+        </div>
+
+        <div class="mb-3">
+          <h2 class="font-serif text-xl font-semibold text-charcoal leading-snug">
+            Elegí el día de tu turno
+          </h2>
+          <p class="text-xs text-charcoal-muted mt-0.5">
+            Tocá una fecha disponible para ver horarios.
+          </p>
+        </div>
+
+        <!-- Tarjeta Calendario Mensual Interactivo -->
+        <div class="bg-white rounded-3xl p-4 border border-charcoal/8 shadow-card">
+          <!-- Navegación Mes -->
+          <div class="flex items-center justify-between mb-3.5">
+            <button
+              type="button"
+              id="prev-month-btn"
+              onclick="changeMonth(-1)"
+              class="w-8 h-8 rounded-xl bg-cream hover:bg-sand flex items-center justify-center text-charcoal disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer"
+              aria-label="Mes anterior"
+            >
+              <i class="ph-bold ph-caret-left text-sm"></i>
+            </button>
+
+            <h3 id="calendar-month-title" class="font-serif text-base font-semibold text-charcoal capitalize">
+              Noviembre 2026
+            </h3>
+
+            <button
+              type="button"
+              id="next-month-btn"
+              onclick="changeMonth(1)"
+              class="w-8 h-8 rounded-xl bg-cream hover:bg-sand flex items-center justify-center text-charcoal disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer"
+              aria-label="Mes siguiente"
+            >
+              <i class="ph-bold ph-caret-right text-sm"></i>
+            </button>
+          </div>
+
+          <!-- Cabecera Días de la Semana -->
+          <div class="grid grid-cols-7 text-center text-[11px] font-bold text-charcoal-light mb-2">
+            <span>Lun</span>
+            <span>Mar</span>
+            <span>Mié</span>
+            <span>Jue</span>
+            <span>Vie</span>
+            <span>Sáb</span>
+            <span class="text-terracotta/70">Dom</span>
+          </div>
+
+          <!-- Grilla de días -->
+          <div id="calendar-grid" class="grid grid-cols-7 gap-1.5 text-center">
+            <!-- Renderizado por JS -->
+          </div>
+
+          <!-- Leyenda de disponibilidad -->
+          <div class="mt-4 pt-3 border-t border-charcoal/6 flex items-center justify-between text-[11px] text-charcoal-muted">
+            <span class="inline-flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-sage"></span> Disponible
+            </span>
+            <span class="inline-flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-amber-500"></span> Últimos lugares
+            </span>
+            <span class="inline-flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-charcoal/20"></span> Sin turno
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== PASO 3: ELEGÍ EL HORARIO ==================== -->
+      <section id="step-3" class="hidden flex-1 flex flex-col">
+        <!-- Chips resumen de Servicio + Fecha -->
+        <div class="flex gap-2 mb-3.5">
+          <button
+            type="button"
+            onclick="goToStep(1, 'backward')"
+            class="flex-1 min-w-0 bg-white hover:bg-sand/40 px-3 py-2 rounded-2xl border border-charcoal/8 shadow-card text-left transition-colors cursor-pointer"
+          >
+            <span class="text-[10px] font-semibold text-charcoal-light uppercase block">Servicio</span>
+            <span id="chip3-service" class="text-xs font-bold text-charcoal truncate block">Corte & Brushing</span>
+          </button>
+
+          <button
+            type="button"
+            onclick="goToStep(2, 'backward')"
+            class="flex-1 min-w-0 bg-white hover:bg-sand/40 px-3 py-2 rounded-2xl border border-charcoal/8 shadow-card text-left transition-colors cursor-pointer"
+          >
+            <span class="text-[10px] font-semibold text-charcoal-light uppercase block">Día elegido</span>
+            <span id="chip3-date" class="text-xs font-bold text-terracotta truncate block">Mar 17 Nov</span>
+          </button>
+        </div>
+
+        <div class="flex items-end justify-between mb-3">
+          <div>
+            <h2 class="font-serif text-xl font-semibold text-charcoal leading-snug">
+              Horarios disponibles
+            </h2>
+            <p class="text-xs text-charcoal-muted mt-0.5">
+              Seleccioná la hora que mejor te quede.
+            </p>
+          </div>
+          <span id="slots-free-badge" class="text-[11px] font-bold text-sage bg-sage-light px-2.5 py-1 rounded-full shrink-0">
+            5 libres
+          </span>
+        </div>
+
+        <div class="space-y-3.5">
+          <!-- Bloque Mañana -->
+          <div class="bg-white rounded-2xl p-4 border border-charcoal/8 shadow-card">
+            <div class="flex items-center gap-2 text-xs font-bold text-charcoal mb-3">
+              <span class="w-6 h-6 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
+                <i class="ph-fill ph-sun-horizon text-sm"></i>
+              </span>
+              <span>Turno Mañana</span>
+              <span class="text-[11px] font-normal text-charcoal-light ml-auto">09:00 a 13:00</span>
+            </div>
+            <div id="morning-slots-grid" class="grid grid-cols-2 gap-2">
+              <!-- Renderizado por JS -->
+            </div>
+          </div>
+
+          <!-- Bloque Tarde (Horario Quimilí / Santiago del Estero) -->
+          <div class="bg-white rounded-2xl p-4 border border-charcoal/8 shadow-card">
+            <div class="flex items-center gap-2 text-xs font-bold text-charcoal mb-3">
+              <span class="w-6 h-6 rounded-lg bg-terracotta-light text-terracotta flex items-center justify-center">
+                <i class="ph-fill ph-moon-stars text-sm"></i>
+              </span>
+              <span>Turno Tarde</span>
+              <span class="text-[11px] font-normal text-charcoal-light ml-auto">17:00 a 21:00</span>
+            </div>
+            <div id="afternoon-slots-grid" class="grid grid-cols-2 gap-2">
+              <!-- Renderizado por JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== PASO 4: TUS DATOS Y CONFIRMACIÓN ==================== -->
+      <section id="step-4" class="hidden flex-1 flex flex-col justify-between">
+        <div>
+          <div class="mb-3">
+            <h2 class="font-serif text-xl font-semibold text-charcoal leading-snug">
+              Último paso, confirmá tu turno
+            </h2>
+            <p class="text-xs text-charcoal-muted mt-0.5">
+              Revisá el detalle y completá tu nombre.
+            </p>
+          </div>
+
+          <!-- Tarjeta Resumen del Turno -->
+          <div class="bg-white rounded-2xl p-3.5 border border-charcoal/8 shadow-card mb-3.5">
+            <div class="flex items-center justify-between pb-2.5 mb-2.5 border-b border-dashed border-charcoal/12">
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-charcoal-light">Servicio</span>
+                <p id="summary4-service" class="text-sm font-bold text-charcoal">Corte & Brushing</p>
+                <span id="summary4-duration" class="text-[11px] text-charcoal-muted">Duración: 45 min</span>
+              </div>
+              <span id="summary4-price" class="text-sm font-bold text-terracotta bg-terracotta-light px-3 py-1 rounded-xl">
+                $12.000
+              </span>
+            </div>
+
+            <div class="flex items-center justify-between text-xs">
+              <div class="flex items-center gap-1.5 text-charcoal font-semibold">
+                <i class="ph-duotone ph-calendar-check text-terracotta text-base"></i>
+                <span id="summary4-date">Martes 17 Nov</span>
+              </div>
+              <div class="flex items-center gap-1.5 text-charcoal font-semibold">
+                <i class="ph-duotone ph-clock text-terracotta text-base"></i>
+                <span id="summary4-time">18:00 hs</span>
+              </div>
+              <button
+                type="button"
+                onclick="goToStep(2, 'backward')"
+                class="text-[11px] font-semibold text-terracotta underline cursor-pointer"
+              >
+                Editar
+              </button>
+            </div>
+          </div>
+
+          <!-- Formulario Simple -->
+          <form id="booking-form" onsubmit="submitBooking(event)" class="bg-white rounded-2xl p-4 border border-charcoal/8 shadow-card space-y-3">
+            <div>
+              <label for="input-name" class="block text-xs font-bold text-charcoal mb-1">
+                Nombre y Apellido <span class="text-terracotta">*</span>
+              </label>
+              <div class="relative">
+                <i class="ph ph-user absolute left-3.5 top-1/2 -translate-y-1/2 text-charcoal-light text-base"></i>
+                <input
+                  type="text"
+                  id="input-name"
+                  required
+                  placeholder="Ej: Valentina Gómez"
+                  class="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-cream/70 border border-charcoal/12 text-sm text-charcoal placeholder:text-charcoal-light focus:outline-none focus:border-terracotta focus:bg-white transition-all"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label for="input-phone" class="block text-xs font-bold text-charcoal mb-1">
+                WhatsApp <span class="text-charcoal-light font-normal">(para recordatorio)</span>
+              </label>
+              <div class="relative">
+                <i class="ph ph-whatsapp-logo absolute left-3.5 top-1/2 -translate-y-1/2 text-charcoal-light text-base"></i>
+                <input
+                  type="tel"
+                  id="input-phone"
+                  placeholder="Ej: 3843 412345"
+                  class="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-cream/70 border border-charcoal/12 text-sm text-charcoal placeholder:text-charcoal-light focus:outline-none focus:border-terracotta focus:bg-white transition-all"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label for="input-note" class="block text-xs font-bold text-charcoal mb-1">
+                Nota adicional <span class="text-charcoal-light font-normal">(opcional)</span>
+              </label>
+              <input
+                type="text"
+                id="input-note"
+                placeholder="Ej: Pelo largo / diseño sencillo"
+                class="w-full px-3.5 py-2 rounded-xl bg-cream/70 border border-charcoal/12 text-sm text-charcoal placeholder:text-charcoal-light focus:outline-none focus:border-terracotta focus:bg-white transition-all"
+              />
+            </div>
+          </form>
+        </div>
+
+        <!-- Botón Confirmar Turno -->
+        <div class="pt-4">
+          <button
+            type="submit"
+            form="booking-form"
+            class="w-full py-3.5 px-5 rounded-2xl bg-terracotta hover:bg-terracotta-dark active:scale-[0.98] text-white font-bold text-sm shadow-soft transition-all flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <span>Confirmar Turno</span>
+            <i class="ph-bold ph-check-circle text-lg"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ==================== PASO 5: TICKET DE CONFIRMACIÓN ==================== -->
+      <section id="step-5" class="hidden flex-1 flex flex-col justify-between anim-pop">
+        <div>
+          <!-- Cabecera Éxito -->
+          <div class="text-center pt-1 pb-4">
+            <div class="w-14 h-14 rounded-full bg-sage-light text-sage flex items-center justify-center mx-auto mb-2.5 shadow-sm">
+              <i class="ph-fill ph-check-circle text-3xl"></i>
+            </div>
+            <span id="ticket-code" class="inline-block text-[11px] font-bold tracking-wider uppercase text-sage bg-sage-light px-3 py-0.5 rounded-full mb-1.5">
+              Reserva #QML-4821
+            </span>
+            <h2 class="font-serif text-2xl font-semibold text-charcoal">
+              ¡Turno Reservado!
+            </h2>
+            <p class="text-xs text-charcoal-muted mt-0.5">
+              Te esperamos en <strong class="text-charcoal">Élan Beauty Studio</strong>, Quimilí.
+            </p>
+          </div>
+
+          <!-- Ticket Digital -->
+          <div class="bg-white rounded-3xl p-4 border border-charcoal/10 shadow-card space-y-3 relative">
+            <div class="flex items-start justify-between gap-2 pb-3 border-b border-dashed border-charcoal/15">
+              <div>
+                <span class="text-[10px] font-bold uppercase text-charcoal-light">Cliente</span>
+                <p id="ticket-client" class="text-sm font-bold text-charcoal">Valentina Gómez</p>
+              </div>
+              <span id="ticket-price" class="text-sm font-bold text-terracotta bg-terracotta-light px-2.5 py-1 rounded-xl">
+                $12.000
+              </span>
+            </div>
+
+            <div>
+              <span class="text-[10px] font-bold uppercase text-charcoal-light">Servicio</span>
+              <p id="ticket-service" class="text-sm font-bold text-charcoal">Corte & Brushing</p>
+              <p id="ticket-duration" class="text-[11px] text-charcoal-muted">Duración estimada: 45 min</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2.5 pt-1">
+              <div class="bg-cream/80 p-2.5 rounded-xl">
+                <span class="text-[10px] font-semibold text-charcoal-light block">Fecha</span>
+                <span id="ticket-date" class="text-xs font-bold text-charcoal">Martes 17 Nov</span>
+              </div>
+              <div class="bg-cream/80 p-2.5 rounded-xl">
+                <span class="text-[10px] font-semibold text-charcoal-light block">Horario</span>
+                <span id="ticket-time" class="text-xs font-bold text-charcoal">18:00 hs</span>
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-charcoal/6 flex items-center gap-2 text-[11px] text-charcoal-muted">
+              <i class="ph-fill ph-map-pin text-terracotta text-sm shrink-0"></i>
+              <span>Av. San Martín 450, Quimilí, Sgo. del Estero</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Acciones Finales -->
+        <div class="space-y-2 pt-4">
+          <a
+            id="btn-whatsapp-ticket"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full py-3.5 px-4 rounded-2xl bg-[#25D366] hover:bg-[#20BD5A] active:scale-[0.98] text-white font-bold text-sm shadow-soft flex items-center justify-center gap-2 transition-all"
+          >
+            <i class="ph-fill ph-whatsapp-logo text-lg"></i>
+            <span>Enviar comprobante por WhatsApp</span>
+          </a>
+
+          <button
+            type="button"
+            onclick="resetWizard()"
+            class="w-full py-2.5 px-4 rounded-2xl bg-white hover:bg-sand text-charcoal font-semibold text-xs border border-charcoal/10 transition-colors cursor-pointer"
+          >
+            Reservar otro turno
+          </button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ==================== FOOTER MINIMALISTA ==================== -->
+    <footer class="shrink-0 bg-cream px-5 py-2.5 border-t border-charcoal/6 flex items-center justify-between text-[11px] text-charcoal-light">
+      <span class="truncate">Av. San Martín 450 · Quimilí</span>
+      <span class="font-medium text-charcoal-muted shrink-0">@elanbeauty.quimili</span>
+    </footer>
+
+    <!-- ==================== TOAST AVISOS ==================== -->
+    <div
+      id="toast"
+      class="pointer-events-none absolute top-20 left-1/2 -translate-x-1/2 z-50 opacity-0 transition-all duration-300 w-[88%]"
+    >
+      <div class="bg-charcoal text-white text-xs font-medium px-3.5 py-2.5 rounded-xl shadow-lg flex items-center gap-2">
+        <i class="ph-fill ph-warning-circle text-amber-400 text-base shrink-0"></i>
+        <span id="toast-text">Completá tu nombre para continuar</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ==================== LÓGICA DEL STEPPER INTERACTIVO ==================== -->
+  <script>
+    // 1. CATÁLOGO DE SERVICIOS
+    const CATEGORIES = ['Todos', 'Cabello', 'Uñas', 'Cejas & Pestañas'];
+
+    const SERVICES = [
+      {
+        id: 'corte',
+        category: 'Cabello',
+        name: 'Corte & Brushing',
+        duration: '45 min',
+        price: '$12.000',
+        desc: 'Lavado nutritivo, corte y modelado',
+        icon: 'ph-scissors',
+      },
+      {
+        id: 'balayage',
+        category: 'Cabello',
+        name: 'Balayage / Coloración',
+        duration: '2 hs',
+        price: '$36.000',
+        desc: 'Iluminación, mechas o tintura completa',
+        icon: 'ph-paint-brush-broad',
+      },
+      {
+        id: 'semi',
+        category: 'Uñas',
+        name: 'Manicura Semipermanente',
+        duration: '60 min',
+        price: '$10.500',
+        desc: 'Limado, cutículas y esmaltado gel',
+        icon: 'ph-hand-soap',
+      },
+      {
+        id: 'kapping',
+        category: 'Uñas',
+        name: 'Kapping Gel',
+        duration: '75 min',
+        price: '$14.000',
+        desc: 'Baño de gel protector + esmaltado',
+        icon: 'ph-sparkle',
+      },
+      {
+        id: 'lifting',
+        category: 'Cejas & Pestañas',
+        name: 'Lifting de Pestañas',
+        duration: '50 min',
+        price: '$11.500',
+        desc: 'Arqueado natural, tinte y nutrición',
+        icon: 'ph-eye',
+      },
+      {
+        id: 'cejas',
+        category: 'Cejas & Pestañas',
+        name: 'Perfilado de Cejas',
+        duration: '30 min',
+        price: '$7.500',
+        desc: 'Diseño según rostro y depilación',
+        icon: 'ph-magic-wand',
+      },
+    ];
+
+    // 2. HORARIOS ADAPTADOS A QUIMILÍ / SANTIAGO DEL ESTERO
+    const MORNING_SLOTS = ['09:00', '10:00', '11:00', '12:00'];
+    const AFTERNOON_SLOTS = ['17:00', '18:00', '19:00', '20:00'];
+
+    // 3. CONFIGURACIÓN DE CALENDARIO (Noviembre y Diciembre 2026)
+    // Hoy real/simulado: Lunes 16 de Noviembre de 2026
+    const TODAY = { year: 2026, month: 10, day: 16 }; // month 10 = Noviembre (0-indexed)
+
+    const MONTHS_CONFIG = [
+      { year: 2026, month: 10, name: 'Noviembre 2026', shortName: 'Nov', days: 30 },
+      { year: 2026, month: 11, name: 'Diciembre 2026', shortName: 'Dic', days: 31 },
+    ];
+
+    const DAY_NAMES_SHORT = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    const DAY_NAMES_FULL = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+
+    // Registro local de turnos recién reservados durante la sesión
+    const sessionBookedSlots = {};
+
+    // Estado del Wizard
+    let state = {
+      currentStep: 1,
+      selectedCategory: 'Todos',
+      selectedService: null,
+      viewMonthIndex: 0, // 0 = Noviembre 2026, 1 = Diciembre 2026
+      selectedDate: null, // { year, month, day, monthShort, weekdayIdx }
+      selectedTime: null,
+    };
+
+    // ==================== UTILIDADES DE FECHA Y DISPONIBILIDAD ====================
+    function getWeekdayIdx(year, month, day) {
+      return new Date(year, month, day).getDay();
+    }
+
+    function isPastDate(year, month, day) {
+      if (year < TODAY.year) return true;
+      if (year === TODAY.year && month < TODAY.month) return true;
+      if (year === TODAY.year && month === TODAY.month && day < TODAY.day) return true;
+      return false;
+    }
+
+    function getDateKey(year, month, day) {
+      return `${year}-${month}-${day}`;
+    }
+
+    // Genera horarios ocupados deterministas por fecha para simular disponibilidad real
+    function getOccupiedSlots(year, month, day, serviceId) {
+      const allSlots = [...MORNING_SLOTS, ...AFTERNOON_SLOTS];
+      const seed = year * 13 + (month + 1) * 31 + day * 7;
+      const occupied = new Set();
+
+      // Días puntuales sin cupo para realismo
+      if ((month === 10 && day === 19) || (month === 11 && day === 24)) {
+        return allSlots;
+      }
+
+      allSlots.forEach((slot, idx) => {
+        // Pseudo-aleatorio determinista (~35% ocupados)
+        if ((seed + idx * 5) % 3 === 0) {
+          occupied.add(slot);
+        }
+      });
+
+      // Si el servicio es largo (Balayage 2hs), bloqueamos último turno de mañana y tarde
+      if (serviceId === 'balayage') {
+        occupied.add('12:00');
+        occupied.add('20:00');
+      }
+
+      // Agregar turnos confirmados en esta misma sesión
+      const key = getDateKey(year, month, day);
+      if (sessionBookedSlots[key]) {
+        sessionBookedSlots[key].forEach((s) => occupied.add(s));
+      }
+
+      // Garantizar al menos 2 turnos libres salvo días completos
+      if (occupied.size >= allSlots.length) {
+        occupied.delete('10:00');
+        occupied.delete('18:00');
+      }
+
+      return Array.from(occupied);
+    }
+
+    // ==================== NAVEGACIÓN ENTRE PASOS ====================
+    const STEP_META = {
+      1: { label: 'Servicio', progress: '25%' },
+      2: { label: 'Fecha', progress: '50%' },
+      3: { label: 'Horario', progress: '75%' },
+      4: { label: 'Confirmar', progress: '100%' },
+    };
+
+    function goToStep(targetStep, direction = 'forward') {
+      state.currentStep = targetStep;
+
+      // Ocultar todos los pasos
+      for (let i = 1; i <= 5; i++) {
+        const el = document.getElementById(`step-${i}`);
+        el.classList.add('hidden');
+        el.classList.remove('anim-forward', 'anim-backward');
+      }
+
+      // Mostrar el paso destino con animación suave
+      const activeEl = document.getElementById(`step-${targetStep}`);
+      activeEl.classList.remove('hidden');
+      void activeEl.offsetWidth; // Reflow para reiniciar animación CSS
+      activeEl.classList.add(direction === 'backward' ? 'anim-backward' : 'anim-forward');
+
+      // Resetear scroll interno del viewport
+      document.getElementById('step-viewport').scrollTop = 0;
+
+      // Actualizar header del stepper
+      const stepperHeader = document.getElementById('stepper-header');
+      const btnBack = document.getElementById('btn-back');
+
+      if (targetStep === 5) {
+        stepperHeader.classList.add('hidden');
+      } else {
+        stepperHeader.classList.remove('hidden');
+        const meta = STEP_META[targetStep];
+        document.getElementById('step-counter').textContent = `Paso ${targetStep} de 4`;
+        document.getElementById('step-short-label').textContent = meta.label;
+        document.getElementById('progress-bar').style.width = meta.progress;
+
+        if (targetStep > 1) {
+          btnBack.classList.remove('invisible');
+        } else {
+          btnBack.classList.add('invisible');
+        }
+      }
+
+      // Renderizar datos específicos del paso
+      if (targetStep === 1) renderStep1();
+      if (targetStep === 2) renderStep2();
+      if (targetStep === 3) renderStep3();
+      if (targetStep === 4) renderStep4();
+    }
+
+    function goBack() {
+      if (state.currentStep > 1 && state.currentStep <= 4) {
+        goToStep(state.currentStep - 1, 'backward');
+      }
+    }
+
+    // ==================== RENDER PASO 1: SERVICIOS ====================
+    function renderStep1() {
+      // Render categorías
+      const pillsEl = document.getElementById('category-pills');
+      pillsEl.innerHTML = CATEGORIES.map((cat) => {
+        const active = cat === state.selectedCategory;
+        return `
+          <button
+            type="button"
+            onclick="selectCategory('${cat}')"
+            class="shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+              active
+                ? 'bg-charcoal text-white shadow-xs'
+                : 'bg-white text-charcoal-muted hover:text-charcoal border border-charcoal/8'
+            }"
+          >
+            ${cat}
+          </button>
+        `;
+      }).join('');
+
+      // Render tarjetas de servicio
+      const listEl = document.getElementById('services-list');
+      const filtered =
+        state.selectedCategory === 'Todos'
+          ? SERVICES
+          : SERVICES.filter((s) => s.category === state.selectedCategory);
+
+      listEl.innerHTML = filtered
+        .map((srv) => {
+          const isSelected = state.selectedService && state.selectedService.id === srv.id;
+          return `
+            <button
+              type="button"
+              id="srv-card-${srv.id}"
+              onclick="handleSelectService('${srv.id}')"
+              class="w-full text-left p-3 rounded-2xl border transition-all flex items-center justify-between gap-2.5 cursor-pointer active:scale-[0.99] ${
+                isSelected
+                  ? 'bg-terracotta-light/60 border-terracotta ring-2 ring-terracotta/25'
+                  : 'bg-white hover:border-terracotta/50 border-charcoal/8 shadow-card'
+              }"
+            >
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
+                  isSelected ? 'bg-terracotta text-white' : 'bg-sand/80 text-charcoal'
+                }">
+                  <i class="ph-duotone ${srv.icon} text-xl"></i>
+                </div>
+                <div class="min-w-0">
+                  <p class="text-sm font-bold text-charcoal truncate">${srv.name}</p>
+                  <p class="text-[11px] text-charcoal-muted truncate">${srv.desc}</p>
+                  <span class="inline-flex items-center gap-1 text-[10px] font-semibold text-charcoal-light mt-0.5">
+                    <i class="ph ph-clock"></i> ${srv.duration}
+                  </span>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2 shrink-0">
+                <span class="text-xs font-bold text-charcoal bg-cream px-2.5 py-1 rounded-lg border border-charcoal/6">
+                  ${srv.price}
+                </span>
+                <i class="ph-bold ph-caret-right text-terracotta text-sm"></i>
+              </div>
+            </button>
+          `;
+        })
+        .join('');
+    }
+
+    function selectCategory(cat) {
+      state.selectedCategory = cat;
+      renderStep1();
+    }
+
+    function handleSelectService(serviceId) {
+      const srv = SERVICES.find((s) => s.id === serviceId);
+      state.selectedService = srv;
+
+      // Feedback visual breve (160ms) antes de avanzar automáticamente al Paso 2
+      const card = document.getElementById(`srv-card-${serviceId}`);
+      if (card) {
+        card.classList.add('bg-terracotta-light/70', 'border-terracotta', 'ring-2', 'ring-terracotta/30');
+      }
+
+      setTimeout(() => {
+        goToStep(2, 'forward');
+      }, 160);
+    }
+
+    // ==================== RENDER PASO 2: CALENDARIO ====================
+    function renderStep2() {
+      if (state.selectedService) {
+        document.getElementById('pill-service-name').textContent = `${state.selectedService.name} (${state.selectedService.price})`;
+        document.getElementById('pill-service-icon').className = `ph-duotone ${state.selectedService.icon} text-base`;
+      }
+
+      const monthObj = MONTHS_CONFIG[state.viewMonthIndex];
+      document.getElementById('calendar-month-title').textContent = monthObj.name;
+
+      document.getElementById('prev-month-btn').disabled = state.viewMonthIndex === 0;
+      document.getElementById('next-month-btn').disabled = state.viewMonthIndex === MONTHS_CONFIG.length - 1;
+
+      const gridEl = document.getElementById('calendar-grid');
+      // Calcular offset para grilla que inicia en Lunes (0=Lun ... 6=Dom)
+      const firstDayJs = getWeekdayIdx(monthObj.year, monthObj.month, 1);
+      const leadingBlanks = firstDayJs === 0 ? 6 : firstDayJs - 1;
+
+      let html = '';
+      for (let i = 0; i < leadingBlanks; i++) {
+        html += `<div class="h-10"></div>`;
+      }
+
+      const totalSlotsCount = MORNING_SLOTS.length + AFTERNOON_SLOTS.length;
+
+      for (let day = 1; day <= monthObj.days; day++) {
+        const weekdayIdx = getWeekdayIdx(monthObj.year, monthObj.month, day);
+        const isSunday = weekdayIdx === 0;
+        const past = isPastDate(monthObj.year, monthObj.month, day);
+        const occupied = getOccupiedSlots(monthObj.year, monthObj.month, day, state.selectedService?.id);
+        const freeCount = totalSlotsCount - occupied.length;
+        const disabled = isSunday || past || freeCount === 0;
+
+        const isToday =
+          monthObj.year === TODAY.year && monthObj.month === TODAY.month && day === TODAY.day;
+
+        const isSelected =
+          state.selectedDate &&
+          state.selectedDate.year === monthObj.year &&
+          state.selectedDate.month === monthObj.month &&
+          state.selectedDate.day === day;
+
+        // Indicador de disponibilidad (verde = buena, ámbar = pocos turnos)
+        let dotColor = 'bg-sage';
+        if (freeCount <= 2) dotColor = 'bg-amber-500';
+
+        if (disabled) {
+          html += `
+            <button
+              type="button"
+              disabled
+              class="h-10 rounded-xl flex flex-col items-center justify-center text-xs font-medium cursor-not-allowed ${
+                isSunday
+                  ? 'text-terracotta/40 bg-terracotta-light/20'
+                  : 'text-charcoal-light/40 line-through'
+              }"
+              title="${isSunday ? 'Domingo cerrado' : 'Sin disponibilidad'}"
+            >
+              <span>${day}</span>
+            </button>
+          `;
+        } else {
+          html += `
+            <button
+              type="button"
+              id="cal-day-${day}"
+              onclick="handleSelectDate(${day})"
+              class="h-10 rounded-xl flex flex-col items-center justify-center text-xs font-bold transition-all cursor-pointer relative ${
+                isSelected
+                  ? 'bg-terracotta text-white shadow-soft scale-105'
+                  : isToday
+                  ? 'bg-sand text-charcoal ring-1 ring-terracotta'
+                  : 'bg-cream/80 hover:bg-terracotta-light/60 text-charcoal'
+              }"
+            >
+              <span>${day}</span>
+              <span class="w-1.5 h-1.5 rounded-full mt-0.5 ${isSelected ? 'bg-white' : dotColor}"></span>
+            </button>
+          `;
+        }
+      }
+
+      gridEl.innerHTML = html;
+    }
+
+    function changeMonth(delta) {
+      const nextIdx = state.viewMonthIndex + delta;
+      if (nextIdx >= 0 && nextIdx < MONTHS_CONFIG.length) {
+        state.viewMonthIndex = nextIdx;
+        renderStep2();
+      }
+    }
+
+    function handleSelectDate(day) {
+      const monthObj = MONTHS_CONFIG[state.viewMonthIndex];
+      const weekdayIdx = getWeekdayIdx(monthObj.year, monthObj.month, day);
+
+      state.selectedDate = {
+        year: monthObj.year,
+        month: monthObj.month,
+        day: day,
+        monthShort: monthObj.shortName,
+        monthFull: monthObj.name.split(' ')[0],
+        weekdayIdx: weekdayIdx,
+      };
+
+      // Resaltar visualmente el día elegido 160ms y avanzar al Paso 3
+      const btn = document.getElementById(`cal-day-${day}`);
+      if (btn) {
+        btn.classList.remove('bg-cream/80', 'bg-sand', 'text-charcoal');
+        btn.classList.add('bg-terracotta', 'text-white', 'scale-105');
+      }
+
+      setTimeout(() => {
+        goToStep(3, 'forward');
+      }, 160);
+    }
+
+    // ==================== RENDER PASO 3: HORARIOS ====================
+    function renderStep3() {
+      const { selectedService, selectedDate } = state;
+      if (!selectedService || !selectedDate) return;
+
+      document.getElementById('chip3-service').textContent = selectedService.name;
+      document.getElementById('chip3-date').textContent = `${DAY_NAMES_SHORT[selectedDate.weekdayIdx]} ${selectedDate.day} ${selectedDate.monthShort}`;
+
+      const occupied = getOccupiedSlots(
+        selectedDate.year,
+        selectedDate.month,
+        selectedDate.day,
+        selectedService.id
+      );
+
+      const allSlots = [...MORNING_SLOTS, ...AFTERNOON_SLOTS];
+      const freeCount = allSlots.filter((s) => !occupied.includes(s)).length;
+      document.getElementById('slots-free-badge').textContent = `${freeCount} libres`;
+
+      const buildSlotButton = (slot) => {
+        const isOccupied = occupied.includes(slot);
+        const isSelected = state.selectedTime === slot && !isOccupied;
+
+        if (isOccupied) {
+          return `
+            <div class="py-2.5 px-3 rounded-xl bg-sand/55 border border-transparent flex items-center justify-between text-xs text-charcoal-light/70 select-none">
+              <span class="line-through font-medium">${slot} hs</span>
+              <span class="text-[10px] font-semibold uppercase tracking-tight">Ocupado</span>
+            </div>
+          `;
+        }
+
+        return `
+          <button
+            type="button"
+            id="slot-btn-${slot.replace(':', '')}"
+            onclick="handleSelectTime('${slot}')"
+            class="py-2.5 px-3 rounded-xl border text-xs font-bold flex items-center justify-between transition-all cursor-pointer active:scale-[0.98] ${
+              isSelected
+                ? 'bg-terracotta text-white border-terracotta shadow-soft'
+                : 'bg-cream/70 hover:bg-terracotta-light/60 hover:border-terracotta/50 text-charcoal border-charcoal/10'
+            }"
+          >
+            <span>${slot} hs</span>
+            <span class="text-[10px] font-semibold ${isSelected ? 'text-white' : 'text-sage'}">Libre</span>
+          </button>
+        `;
+      };
+
+      document.getElementById('morning-slots-grid').innerHTML = MORNING_SLOTS.map(buildSlotButton).join('');
+      document.getElementById('afternoon-slots-grid').innerHTML = AFTERNOON_SLOTS.map(buildSlotButton).join('');
+    }
+
+    function handleSelectTime(slot) {
+      state.selectedTime = slot;
+
+      const btn = document.getElementById(`slot-btn-${slot.replace(':', '')}`);
+      if (btn) {
+        btn.classList.remove('bg-cream/70', 'text-charcoal');
+        btn.classList.add('bg-terracotta', 'text-white', 'border-terracotta');
+      }
+
+      // Avanzar automáticamente al Paso 4
+      setTimeout(() => {
+        goToStep(4, 'forward');
+      }, 160);
+    }
+
+    // ==================== RENDER PASO 4: CONFIRMACIÓN ====================
+    function renderStep4() {
+      const { selectedService, selectedDate, selectedTime } = state;
+      if (!selectedService || !selectedDate || !selectedTime) return;
+
+      document.getElementById('summary4-service').textContent = selectedService.name;
+      document.getElementById('summary4-duration').textContent = `Duración: ${selectedService.duration}`;
+      document.getElementById('summary4-price').textContent = selectedService.price;
+      document.getElementById('summary4-date').textContent = `${DAY_NAMES_FULL[selectedDate.weekdayIdx]} ${selectedDate.day} ${selectedDate.monthShort}`;
+      document.getElementById('summary4-time').textContent = `${selectedTime} hs`;
+    }
+
+    // Toast helper
+    let toastTimer;
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-text').textContent = message;
+      toast.classList.remove('opacity-0', '-translate-y-2');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', '-translate-y-2');
+      }, 2800);
+    }
+
+    // Enviar reserva y generar Ticket (Paso 5)
+    function submitBooking(event) {
+      event.preventDefault();
+
+      const nameInput = document.getElementById('input-name');
+      const phoneInput = document.getElementById('input-phone');
+      const noteInput = document.getElementById('input-note');
+
+      const clientName = nameInput.value.trim();
+      if (!clientName) {
+        nameInput.focus();
+        showToast('Ingresá tu nombre y apellido para reservar');
+        return;
+      }
+
+      const { selectedService, selectedDate, selectedTime } = state;
+      const bookingCode = `#QML-${Math.floor(1000 + Math.random() * 9000)}`;
+      const fullDateStr = `${DAY_NAMES_FULL[selectedDate.weekdayIdx]} ${selectedDate.day} de ${selectedDate.monthFull}`;
+
+      // Guardar el horario como ocupado en la sesión actual
+      const key = getDateKey(selectedDate.year, selectedDate.month, selectedDate.day);
+      if (!sessionBookedSlots[key]) sessionBookedSlots[key] = [];
+      sessionBookedSlots[key].push(selectedTime);
+
+      // Rellenar Ticket Digital
+      document.getElementById('ticket-code').textContent = `Reserva ${bookingCode}`;
+      document.getElementById('ticket-client').textContent = clientName;
+      document.getElementById('ticket-service').textContent = selectedService.name;
+      document.getElementById('ticket-duration').textContent = `Duración estimada: ${selectedService.duration}`;
+      document.getElementById('ticket-price').textContent = selectedService.price;
+      document.getElementById('ticket-date').textContent = fullDateStr;
+      document.getElementById('ticket-time').textContent = `${selectedTime} hs`;
+
+      // Configurar botón de WhatsApp con mensaje prearmado
+      const noteText = noteInput.value.trim();
+      const phoneText = phoneInput.value.trim();
+      const waMsg =
+        `¡Hola Élan Beauty Studio! ✨ Confirmé mi turno online (${bookingCode}):\n\n` +
+        `👤 *Cliente:* ${clientName}\n` +
+        `💇‍♀️ *Servicio:* ${selectedService.name} (${selectedService.price})\n` +
+        `📅 *Día:* ${fullDateStr}\n` +
+        `⏰ *Horario:* ${selectedTime} hs` +
+        `${phoneText ? `\n📱 *Tel:* ${phoneText}` : ''}` +
+        `${noteText ? `\n📝 *Nota:* ${noteText}` : ''}\n\n` +
+        `¡Nos vemos en el salón!`;
+
+      document.getElementById('btn-whatsapp-ticket').href =
+        `https://wa.me/5493843400000?text=${encodeURIComponent(waMsg)}`;
+
+      goToStep(5, 'forward');
+    }
+
+    // Reiniciar flujo para agendar otro turno
+    function resetWizard() {
+      state.selectedService = null;
+      state.selectedDate = null;
+      state.selectedTime = null;
+      state.selectedCategory = 'Todos';
+      document.getElementById('input-note').value = '';
+      goToStep(1, 'backward');
+    }
+
+    // Inicialización al cargar
+    window.addEventListener('DOMContentLoaded', () => {
+      goToStep(1, 'forward');
+    });
+  </script>
+</body>
+</html>
